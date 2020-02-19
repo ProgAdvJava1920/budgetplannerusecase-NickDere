@@ -1,4 +1,4 @@
-package be.pxl.student;
+package be.pxl.nick;
 
 public class BudgetPlanner {
 

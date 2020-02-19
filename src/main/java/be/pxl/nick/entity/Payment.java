@@ -1,4 +1,4 @@
-package be.pxl.student.entity;
+package be.pxl.nick.entity;
 
 import java.util.Date;
 

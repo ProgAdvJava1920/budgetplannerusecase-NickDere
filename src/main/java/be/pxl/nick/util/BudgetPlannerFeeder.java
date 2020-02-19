@@ -1,4 +1,4 @@
-package be.pxl.student.util;
+package be.pxl.nick.util;
 
 import com.github.javafaker.Faker;
 
