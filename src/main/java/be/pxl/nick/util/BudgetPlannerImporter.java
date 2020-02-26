@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,8 +57,6 @@ public class BudgetPlannerImporter {
     }
 
     private Payment createPayment(String[] lines) {
-//Account name,Account IBAN,Counteraccount IBAN,Transaction date,Amount,Currency,Detail
-
         float amount = Float.parseFloat(lines[4]);
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
