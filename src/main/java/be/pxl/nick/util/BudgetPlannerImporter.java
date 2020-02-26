@@ -26,7 +26,6 @@ public class BudgetPlannerImporter {
     //}
 
     public Account readFile(String fileName) {
-        //this.fileName = fileName;
         List<Payment> payments = new ArrayList<>();
         Path path = Paths.get(fileName);
         try (BufferedReader reader = Files.newBufferedReader(path)) {
