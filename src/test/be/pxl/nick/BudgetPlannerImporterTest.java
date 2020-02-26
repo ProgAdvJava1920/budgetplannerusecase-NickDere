@@ -19,7 +19,7 @@ public class BudgetPlannerImporterTest {
     }
 
     @Test
-    public void testIfReadFileGivesCorrectAmmountOfPayments() {
+    public void testIfReadFileGivesCorrectAmountOfPayments() {
         assertEquals(account.getPayments().size(), 100);
     }
 }
