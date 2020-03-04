@@ -1,35 +1,36 @@
 package be.pxl.nick.dao;
 
 import be.pxl.nick.entity.Account;
+import be.pxl.nick.entity.Label;
 
 import java.sql.*;
 
-public class PaymentDAO {
-    private static final String SELECT_BY_ID = "SELECT * FROM Account WHERE id = ?";
-    private static final String UPDATE = "UPDATE Account SET name=?, IBAN=? WHERE id = ?";
-    private static final String INSERT = "INSERT INTO Account (name, IBAN) VALUES (?, ?)";
-    private static final String DELETE = "DELETE FROM Account WHERE id = ?";
+public class LabelDAO {
+    private static final String SELECT_BY_ID = "SELECT * FROM Label WHERE id = ?";
+    private static final String UPDATE = "UPDATE Label SET name=?, description=? WHERE id = ?";
+    private static final String INSERT = "INSERT INTO Label (name, description) VALUES (?, ?)";
+    private static final String DELETE = "DELETE FROM Label WHERE id = ?";
     private String url;
     private String user;
     private String password;
 
-    public AccountDAO(String url, String user, String password) {
+    public LabelDAO(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;
     }
 
 
-    public Account createAccount(Account account) {
+    public Label createLabel(Label label) {
 
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, account.getName());
-            stmt.setString(2, account.getIBAN());
+            stmt.setString(1, label.getName());
+            stmt.setString(2, label.getDescription());
             if (stmt.executeUpdate() == 1) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                        account.setId(rs.getInt(1));
-                        return account;
+                        label.setId(rs.getInt(1));
+                        return label;
                     }
                 }
             }
@@ -39,11 +40,11 @@ public class PaymentDAO {
         return null;
     }
 
-    public boolean updateAccount(Account account) {
+    public boolean updateLabel(Label label) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
-            stmt.setString(1, account.getName());
-            stmt.setString(2, account.getIBAN());
-            stmt.setInt(3, account.getId());
+            stmt.setString(1, label.getName());
+            stmt.setString(2, label.getDescription());
+            stmt.setInt(3, label.getId());
             return stmt.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -51,7 +52,7 @@ public class PaymentDAO {
         return false;
     }
 
-    public boolean deleteAccount(int id) {
+    public boolean deleteLabel(int id) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(DELETE)) {
             stmt.setInt(1, id);
             return stmt.execute();
@@ -61,12 +62,12 @@ public class PaymentDAO {
         return false;
     }
 
-    public Account readAccount(int id) {
+    public Label readLabel(int id) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(SELECT_BY_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return mapAccount(rs);
+                return mapLabel(rs);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -74,12 +75,12 @@ public class PaymentDAO {
         return null;
     }
 
-    public Account mapAccount(ResultSet rs) throws SQLException {
-        Account account = new Account();
-        account.setName(rs.getString("name"));
-        account.setIBAN(rs.getString("iban"));
-        account.setId(rs.getInt("id"));
-        return account;
+    public Label mapLabel(ResultSet rs) throws SQLException {
+        Label label = new Label();
+        label.setName(rs.getString("name"));
+        label.setDescription(rs.getString("description"));
+        label.setId(rs.getInt("id"));
+        return label;
     }
 
     private Connection getConnection() throws SQLException {
