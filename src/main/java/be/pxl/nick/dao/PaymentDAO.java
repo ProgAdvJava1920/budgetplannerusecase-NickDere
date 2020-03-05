@@ -1,35 +1,41 @@
 package be.pxl.nick.dao;
 
 import be.pxl.nick.entity.Account;
+import be.pxl.nick.entity.Payment;
 
 import java.sql.*;
 
 public class PaymentDAO {
-    private static final String SELECT_BY_ID = "SELECT * FROM Account WHERE id = ?";
-    private static final String UPDATE = "UPDATE Account SET name=?, IBAN=? WHERE id = ?";
-    private static final String INSERT = "INSERT INTO Account (name, IBAN) VALUES (?, ?)";
-    private static final String DELETE = "DELETE FROM Account WHERE id = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM Payment WHERE id = ?";
+    private static final String UPDATE = "UPDATE Payment SET date=?, amount=?, currency=?, detail=?, accountId=?, counterAccountId=?, labelId=? WHERE id = ?";
+    private static final String INSERT = "INSERT INTO Payment (date, amount, currency, detail, accountId, counterAccountId, labelId) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String DELETE = "DELETE FROM Payment WHERE id = ?";
     private String url;
     private String user;
     private String password;
 
-    public AccountDAO(String url, String user, String password) {
+    public PaymentDAO(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;
     }
 
 
-    public Account createAccount(Account account) {
+    public Payment createPayment(Payment payment) {
 
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, account.getName());
-            stmt.setString(2, account.getIBAN());
+            stmt.setDate(1, payment.getDate());
+            stmt.setFloat(2, payment.getAmount());
+            stmt.setString(3, payment.getCurrency());
+            stmt.setString(4, payment.getDetail());
+            stmt.setInt(5, payment.getAccountId());
+            stmt.setInt(6, payment.getCounterAccountId());
+            stmt.setInt(7, payment.getLabelId());
             if (stmt.executeUpdate() == 1) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                        account.setId(rs.getInt(1));
-                        return account;
+                        payment.setId(rs.getInt(1));
+                        return payment;
                     }
                 }
             }
